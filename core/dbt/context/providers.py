@@ -394,8 +394,17 @@ class RuntimeSourceResolver(BaseSourceResolver):
         return self.Relation.create_from_source(target_source)
 
 
-# `var` implementations.
 class ConfiguredVar(Var):
+    def __init__(
+        self,
+        context: Dict[str, Any],
+        config: RuntimeConfig,
+        resource: IsFQNResource,
+    )
+
+
+# `var` implementations.
+class ModelConfiguredVar(Var):
     def __init__(
         self,
         context: Dict[str, Any],
@@ -436,13 +445,13 @@ class ConfiguredVar(Var):
         return merged
 
 
-class ParseVar(ConfiguredVar):
+class ParseVar(ModelConfiguredVar):
     def get_missing_var(self, var_name):
         # in the parser, just always return None.
         return None
 
 
-class RuntimeVar(ConfiguredVar):
+class RuntimeVar(ModelConfiguredVar):
     pass
 
 
@@ -451,7 +460,7 @@ class Provider(Protocol):
     execute: bool
     Config: Type[Config]
     DatabaseWrapper: Type[BaseDatabaseWrapper]
-    Var: Type[ConfiguredVar]
+    Var: Type[ModelConfiguredVar]
     ref: Type[BaseRefResolver]
     source: Type[BaseSourceResolver]
 
@@ -812,7 +821,7 @@ class ProviderContext(ManifestContext):
         return self.config.credentials.schema
 
     @contextproperty
-    def var(self) -> ConfiguredVar:
+    def var(self) -> ModelConfiguredVar:
         return self.provider.Var(
             context=self._ctx,
             config=self.config,
