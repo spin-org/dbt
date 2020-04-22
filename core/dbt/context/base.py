@@ -17,6 +17,7 @@ import yaml
 # approaches which will extend well to potentially many modules
 import pytz
 import datetime
+import spin.dbt as spin
 
 
 def get_pytz_module_context() -> Dict[str, Any]:
@@ -41,10 +42,20 @@ def get_datetime_module_context() -> Dict[str, Any]:
     }
 
 
+def get_spin_module_context():
+    context_exports = [
+        'hq'
+    ]
+    return {
+        name: getattr(spin, name) for name in context_exports
+    }
+
+
 def get_context_modules() -> Dict[str, Dict[str, Any]]:
     return {
         'pytz': get_pytz_module_context(),
         'datetime': get_datetime_module_context(),
+        'spin': get_spin_module_context(),
     }
 
 
