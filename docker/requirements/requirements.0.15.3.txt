@@ -60,7 +60,7 @@ pytimeparse==1.1.8
 pytz==2019.3
 PyYAML==5.3
 requests==2.23.0
-rsa==4.0
+rsa==4.1
 s3transfer==0.2.1
 six==1.14.0
 snowflake-connector-python==2.0.4
